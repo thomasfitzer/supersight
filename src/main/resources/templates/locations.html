@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">    
+    <title>Locations</title>
+</head>
+<body>
+
+    <div class="container">
+      <!--Page Header-->
+       <div class="row m-4">
+           <div class="col text-center border border-dark">
+               <h1>Locations</h1>
+           </div>
+       </div> 
+       <!--End of Page Header-->
+
+       <!--Navbar Start-->
+       <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="heroes">Heroes</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="superpowers">Superpowers</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="locations">Locations</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="organizations">Organizations</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="sightings">Sightings</a>
+                  </li>                                    
+                </ul>
+              </div>
+            </div>
+          </nav>           
+       </div>
+       <!--Navbar End-->
+
+       <!--Add Form Start-->
+       <div class="row m-4 border border-dark">
+         <!--Add location title-->
+         <div class="col-3 text-center m-3">
+           <span class="h3">Add Location</span>
+         </div>
+         <!--add title end-->
+
+         <div class="col-7 text-center m-3">
+           <form action="addLocation" method="POST">
+             <!--name input start-->
+             <div class="form-group row">
+               <label for="locationName" class="col-3 col-form-label">
+                 Name</label>
+                 <div class="col-9">
+                   <input type="text" name="locationName" id="locationName" 
+                   class="form-control"/>
+                 </div>
+             </div>
+             <!--name input end-->
+             <!--latitude input start-->
+             <div class="form-group row">
+               <label for="latitude" class="col-3 col-form-label">
+                 Latitude</label>
+                 <div class="col-9">
+                   <input type="text" name="latitude" id="latitude" 
+                   class="form-control"/>
+                 </div>
+             </div>
+             <!--latitude input end-->
+             <!--longitue input start-->
+             <div class="form-group row">
+              <label for="longitude" class="col-3 col-form-label">
+                Longitude</label>
+                <div class="col-9">
+                  <input type="text" name="longitude" id="longitude" 
+                  class="form-control"/>
+                </div>
+            </div>             
+             <!--longitude input end-->
+             <!--description start-->
+             <div class="form-group row">
+              <label for="locationDescription" class="col-3 col-form-label">
+                Description</label>
+                <div class="col-9">
+                  <input type="text" name="locationDescription" id="locationDescription"
+                  class="form-control"></input>
+                </div>
+            </div>             
+             <!--description end-->
+             <!--address start-->
+             <div class="form-group row">
+              <label for="address" class="col-3 col-form-label">
+                Address</label>
+                <div class="col-9">
+                  <input type="text" name="address" id="address"
+                  class="form-control"></input>
+                </div>
+              </div>         
+             <!--address end-->
+             <!--submit/go back buttons start-->
+             <div class="form-group row">
+               <div class="col text-center m-4">
+                 <a href="/locations" class="btn btn-outline-primary btn-lg">Reset Form</a>
+               </div>
+               <button type="submit" class="col m-4 btn btn-primary btn-lg">Add Location</button>
+             </div>
+             <!--submit/go back buttons end-->
+           </form>
+         </div>
+         <!--Add form end-->
+        </div>
+       
+  
+    <!-- Locations table -->
+    <div class="row m-4 border border-dark">
+        <div class="col text-center m-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Location Name</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Details</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="location : ${locations}">
+                        <td th:text="${location.id}">Location ID</td>
+                        
+                        <td th:text='${location.name}'>Location Name</td>
+                        
+                        <td th:text='${location.latitude}'>Latitude</td>
+                        
+                        <td th:text="${location.longitude}">Longitude</td>
+                        
+                        <td><a href="#" th:href="@{/viewLocation(id=${location.id})}">Details</a></td>
+                        
+                        <td><a href="#" th:href="@{/editLocation(id=${location.id})}">Edit</a></td>
+                        
+                        <td><a href="#" th:href="@{/deleteLocation(id=${location.id})}">Delete</a></td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> 
+    <!--Location Table End-->      
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.js" integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" 
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" 
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>    
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">    
+    <title>Add Organization</title>
+</head>
+<body>
+
+    <div class="container">
+       <div class="row m-4">
+           <div class="col text-center border border-dark">
+               <h1>Add Organization</h1>
+           </div>
+       </div> 
+       <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="heroes">Heroes</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="superpowers">Superpowers</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="locations">Locations</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="organizations">Organizations</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="sightings">Sightings</a>
+                  </li>                                    
+                </ul>
+              </div>
+            </div>
+          </nav>           
+       </div>
+       <div class="row m-4 border border-dark">
+
+        <div class="col-7 text-center m-3">
+            <form action="addOrg" method="POST">
+                
+                <div class="form-group row">
+                    <label for="organizationName" class="col-3 col-form-label">
+                        Organization Name</label>
+                    <div class="col-9">
+                        <input type="text" name="organizationName" 
+                               id="organizationName" class="form-control"/>
+                        <p class="alert alert-danger" th:each="error : ${errors}" 
+                                th:text="${error.message}"
+                                th:if="${error.getPropertyPath().toString().equals('name')}">Error message</p>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="isHero" class="col-3 col-form-label">
+                        Hero type</label>
+                    <div class="col-9">
+                        <select id="isHero" name="isHero" class="form-control" >
+                            <option value="true">Superhero</option>
+                            <option value="false">Supervillain</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="organizationDescription" class="col-3 col-form-label">
+                        Organization Description</label>
+                    <div class="col-9">
+                        <input type="text" name="organizationDescription" 
+                                  id="organizationDescription" class="form-control"></input>
+                        <p class="alert alert-danger" th:each="error : ${errors}" 
+                                th:text="${error.message}"
+                                th:if="${error.getPropertyPath().toString().equals('description')}">Error message</p>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="organizationAddress" class="col-3 col-form-label">
+                        Organization Address</label>
+                    <div class="col-9">
+                        <input type="text" name="organizationAddress" 
+                                  id="organizationAddress" class="form-control"></input>
+                        <p class="alert alert-danger" th:each="error : ${errors}" 
+                                th:text="${error.message}"
+                                th:if="${error.getPropertyPath().toString().equals('address')}">Error message</p>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="organizationContact" class="col-3 col-form-label">
+                        Organization Contact</label>
+                    <div class="col-9">
+                        <input type="text" name="organizationContact" 
+                                  id="organizationContact" class="form-control"></input>
+                        <p class="alert alert-danger" th:each="error : ${errors}" 
+                                th:text="${error.message}"
+                                th:if="${error.getPropertyPath().toString().equals('contact')}">Error message</p>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="members" class="col-3 col-form-label">
+                        Members</label>
+                    <div class="col-9">
+                        <select multiple id="heroId" name="heroId" class="form-control" >
+                            <option th:each="hero : ${heroes}" 
+                                    th:value="${hero.id}" 
+                                    th:text="${hero.name}">
+                                Hero Name</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row m-4">
+                    <div class="col text-center m-4">
+                        <a href="/organizations" class="btn btn-outline-primary btn-lg">Go Back</a>
+                    </div> 
+
+                    <button type="submit" class="col m-4 btn btn-primary btn-lg">Add Organization</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.js" integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" 
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" 
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>    
+</body>
+</html>

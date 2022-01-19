@@ -1,0 +1,128 @@
+<div class="container">
+    <div class="row m-4">
+        <div class="col text-center border border-dark">
+            <h1>Heroes/Villains</h1>
+        </div>
+    </div> 
+    <div>
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+         <div class="container-fluid">
+           <div class="collapse navbar-collapse" id="navbarNav">
+             <ul class="navbar-nav">
+               <li class="nav-item">
+                 <a class="nav-link" href="/">Home</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link active" aria-current="page"  href="heroes">Heroes</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" href="superpowers">Superpowers</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" href="locations">Locations</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" href="organizations">Organizations</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" href="sightings">Sightings</a>
+               </li>                                    
+             </ul>
+           </div>
+         </div>
+       </nav>           
+    </div>
+
+    <div class="container">
+    <div class="row m-4">
+     <div class="col-7">
+       <form action="addHero" method="POST" enctype="multipart/form-data">
+         <div class="form-group row">
+           <label for="heroName" class="col-3 col-form-label">Hero Name</label>
+           <div class="col-9">
+             <input type="text" name="heroName" id="heroName" class="form-control"/>
+
+            </div>                 
+           </div>
+         </div>
+         <!-- Hero/Villain -->
+         <div class="form-group row">
+           <label for="isHero" class="col-3 col-form-label">
+             Hero or Villain
+           </label>
+           <div class="col-9">
+             <select id="isHero" name="isHero" class="form-control">
+               <option th:value="true">Hero</option>
+               <option th:value="false">Villain</option>
+             </select>
+           </div>
+         </div>
+         <!-- Description -->
+         <div class="form-group row">
+           <label for="heroDescription" class="col-3 col-form-label">
+             Hero Description
+           </label>
+           <div class="col-9">
+             <input type="text" name="heroDescription" id="heroDescription" 
+             class="form-control"></input>
+
+           </div>
+         </div>
+
+        <div class="for-group row">
+          <label for="superpower" class="col-3 col-form-label">Superpowers</label>
+          <div class="col-9">
+            <select multiple id="superpowerId" name="superpowerId" class="form-control" >
+              <option th:each="superpower : ${superpowers}"
+                      th:value="${superpower.id}"
+                      th:text="${superpower.name}">Superpower Name</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group row">
+          <div class="col text-center m-4">
+            <a href="/heroes" class="btn btn-outline-primary btn-lg">Go Back</a>
+          </div>
+          <button type="submit" class="col m-4 btn btn-primary btn-lg">Add Hero</button>
+        </div>
+       </form>
+     </div>
+     </div>
+    </div>
+    <div class="row m-4 border border-dark">
+      <div class="col text-center m-3">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Hero Name</th>
+              <th>Alignment</th>
+              <th>Details</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="hero : ${heroes}">
+              <td th:text="${hero.id}">Hero ID</td>
+
+              <td th:text="${hero.name}">Hero Name</td>
+
+              <td>
+                 <span th:if="${hero.isHero}">Hero/Villain</span>
+                 <span th:unless="${hero.isHero}"></span>
+             </td>
+
+              <td><a href="#" th:href="@{/viewHero(id=${hero.id})}">Details</a></td>
+
+              <td><a href="#" th:href="@{/editHero(id=${hero.id})}">Edit</a></td>
+
+              <td><a href="#" th:href="@{/deleteHero(id=${hero.id})}">Delete</a></td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+ </div>

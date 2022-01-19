@@ -1,0 +1,155 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.sg.supersight;
+
+import com.sg.supersight.model.Hero;
+import com.sg.supersight.model.Organization;
+import com.sg.supersight.model.Superpower;
+import com.sg.supersight.service.HeroService;
+import com.sg.supersight.service.OrganizationService;
+import com.sg.supersight.service.SuperpowerService;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+/**
+ *
+ * @author Thomas
+ */
+public class Copy {
+
+    
+    Set<ConstraintViolation<Hero>> violations = new HashSet<>();
+    
+
+
+    
+    
+    @PostMapping("addHero")
+    public String addHero(HttpServletRequest request, Hero hero) {
+        violations.clear();
+        
+        String name = request.getParameter("heroName");
+        boolean isHero = Boolean.parseBoolean(request.getParameter("isHero"));
+        String description = request.getParameter("heroDescription");
+        String[] superpowerIds = request.getParameterValues("superpowerId");
+        
+        List<Superpower> superpowers = new ArrayList<>();
+        if(superpowerIds != null) {
+            for(String superpowerId : superpowerIds) {
+                superpowers.add(superpowerService.getSuperpowerById(Integer.parseInt(superpowerId)));
+            }
+        }
+        heroService.createHero(name, isHero, description, superpowers);
+        
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(hero);
+        if(violations.isEmpty()){
+            heroService.addHero(hero);
+        }
+        
+        
+        
+        return "redirect:/heroes";
+    }
+    
+    @GetMapping("viewHero")
+    public String displaySingleHero(Integer id, Model model) {
+
+        
+        Hero hero = heroService.getHeroById(id);
+        model.addAttribute("hero", hero);
+        
+        List<Organization> organizations = heroService.getOrgsByHero(hero);
+        model.addAttribute("organizations", organizations);
+        
+        return "viewHero";
+    }
+    
+    @GetMapping("deleteHero")
+    public String deleteHero(Integer id) {
+        heroService.deleteHeroById(id);
+        return "redirect:/heroes";
+    }
+    
+    @GetMapping("editHero")
+    public String displayEditHero(Integer id, Model model) {
+        
+        Hero hero = heroService.getHeroById(id);
+        model.addAttribute("hero", hero);
+        
+        List<Superpower> superpowers = superpowerService.getAllSuperpowers();
+        model.addAttribute("superpowers", superpowers);
+        
+        List<Organization> organizations = organizationService.getAllOrgs();
+        model.addAttribute("organizations", organizations);
+        
+        model.addAttribute("errors", violations);
+        
+        return "editHero";
+    } 
+    
+    @PostMapping("editHero")
+    public String editHero(@Valid Hero hero, BindingResult result, HttpServletRequest request, Model model) {
+        violations.clear();
+        int id = Integer.parseInt(request.getParameter("heroId"));
+        hero = heroService.getHeroById(id);
+        
+        String[] superpowerIds = request.getParameterValues("superpowerId");
+        
+        List<Superpower> superpowers = new ArrayList<>();
+        if(superpowerIds != null){
+            for(String superpowerId : superpowerIds) {
+                superpowers.add(superpowerService.getSuperpowerById(Integer.parseInt(superpowerId)));
+            }
+        }
+        hero.setSuperpowers(superpowers);
+        
+        String[] organizationIds = request.getParameterValues("organizationId");
+        List<Organization> organizations = new ArrayList<>();
+        if(organizationIds != null) {
+            for(String organizationId : organizationIds) {
+                organizations.add(organizationService.getOrgById((Integer.parseInt(organizationId))));
+            } 
+        } 
+        
+        hero.setOrganizations(organizations);
+        
+        heroService.updateHero(hero);
+       
+        
+        
+        
+        
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(hero);
+        if(violations.isEmpty()) {
+            heroService.updateHero(hero);
+            return "redirect:/heroes";
+        } else {
+            hero = heroService.getHeroById(hero.getId());
+            model.addAttribute("hero", hero);
+            
+            superpowers = superpowerService.getAllSuperpowers();
+            model.addAttribute("superpowers", superpowers);
+            model.addAttribute("errors", violations);
+            return "redirect:/heroes";
+        }
+        
+        
+    }    
+}
